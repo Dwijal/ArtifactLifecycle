@@ -57,7 +57,7 @@ stages:
         - script: |
             set -e
 
-            chmod 600 $(sshkey.secureFilePath)
+            chmod 400 $(sshkey.secureFilePath)
 
             echo "Finding WAR file..."
             WAR_FILE=$(ls $(System.DefaultWorkingDirectory)/target/*.war | head -n 1)
