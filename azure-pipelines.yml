@@ -58,9 +58,8 @@ stages:
             chmod 600 $(sshkey.secureFilePath)
             ssh -o StrictHostKeyChecking=no \
               -i $(sshkey.secureFilePath) \
-              azureuser@10.0.0.4 \
-              "hostname && whoami && uptime"
-     
+              azureuser@10.0.0.4 
+            hostname
             
 
 # Learnings :  If we have 10 Subnets and 10 VM , 1 VM in each subnet . So only 1 private endpoint is needed to access the 
