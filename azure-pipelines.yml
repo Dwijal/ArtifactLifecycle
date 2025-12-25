@@ -16,6 +16,7 @@ stages:
   - stage: Build_Package
     jobs:
     - job: Build
+      displayName: BuildJob
       steps:
         - script: |
             mvn clean package
@@ -24,9 +25,11 @@ stages:
             ls -lrt $(System.DefaultWorkingDirectory)/target
           displayName: SeeTheWarFile
     - job: Push_To_Blob
+      dependsOn: Build
       displayName: 'PUsh to Azure Blob Storage'
       steps:
         - task: AzureCLI@2
+          displayName: 'Pushing to Blob Storage '
           inputs:
             azureSubscription: 'blobupload'
             scriptType: 'bash'
