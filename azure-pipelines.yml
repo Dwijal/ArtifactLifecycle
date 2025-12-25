@@ -9,6 +9,18 @@ pool:
   name: 'dwipool'
   demands:
     - agent.name -equals dwiagent
-steps:
-- script: echo Hello, world!
-  displayName: 'SampleScript'
+
+
+
+stages:
+  - stage: Build_Package
+    jobs:
+    - job: Build
+      steps:
+        - script: |
+            mvn clean package
+          displayName: Build&PackageCode
+        - script: |
+            ls -lrt $(System.DefaultWorkingDirectory)/target
+          displayName: SeeTheWarFile
+
