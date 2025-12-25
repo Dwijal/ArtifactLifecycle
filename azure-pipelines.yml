@@ -35,12 +35,15 @@ stages:
             scriptType: 'bash'
             scriptLocation: 'inlineScript'
             inlineScript: |
-              az storage blob upload \
-              --account-name companyartifacts \
-              --container-name production-artifact \
-              --file target/*.war \
+              az storage blob upload 
+              --account-name companyartifacts 
+              --container-name productionsartifacts 
+              --file target/*.war 
               --name $(date +%F)/DevOps-CICD-war-0.1.war
-
+        - script: |
+            echo  "Upload Done"
+          condition: succeeded()
+          displayName: UploadStatus
 
 
 # Learnings :  If we have 10 Subnets and 10 VM , 1 VM in each subnet . So only 1 private endpoint is needed to access the 
