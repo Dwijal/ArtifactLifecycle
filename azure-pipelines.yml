@@ -24,6 +24,7 @@ stages:
         - script: |
             ls -lrt $(System.DefaultWorkingDirectory)/target
           displayName: SeeTheWarFile
+          
     - job: Push_To_Blob
       dependsOn: Build
       displayName: 'PUsh to Azure Blob Storage'
@@ -40,10 +41,12 @@ stages:
               --container-name productionsartifacts \
               --file target/*.war \
               --name $(date +%F)/DevOps-CICD-war-0.1.war \
+              --overwrite
         - script: |
             echo  "Upload Done"
           condition: succeeded()
           displayName: UploadStatus
+
     - job: Deploy_to_remobe
       dependsOn: Push_To_Blob
       steps:
