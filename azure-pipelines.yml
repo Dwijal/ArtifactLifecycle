@@ -26,8 +26,17 @@ stages:
     - job: Push_To_Blob
       displayName: 'PUsh to Azure Blob Storage'
       steps:
-        - script: |
-          
+        - task: AzureCLI@2
+          inputs:
+            azureSubscription: 'blobupload'
+            scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              az storage blob upload 
+              --account-name companyartifacts 
+              --container-name production-artifact 
+              --file target/*.war 
+              --name $(date +%F)/DevOps-CICD-war-0.1.war
 
 
 
