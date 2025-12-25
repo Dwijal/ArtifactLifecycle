@@ -23,4 +23,21 @@ stages:
         - script: |
             ls -lrt $(System.DefaultWorkingDirectory)/target
           displayName: SeeTheWarFile
+    - job: Push_To_Blob
+      displayName: 'PUsh to Azure Blob Storage'
+      steps:
+        - script: |
+          
+
+
+
+# Learnings :  If we have 10 Subnets and 10 VM , 1 VM in each subnet . So only 1 private endpoint is needed to access the 
+# storage account from 10 different subnets.
+
+
+### Perform Terraform corruption scenario where lets say my apply failed due to IP exhaustion and it only have created 5 VM 
+### out of 10 and state file is no longer has the changes as the apply failed.
+### So now either we have to remove the changes fro the cloud or add the entires into the state file and repush the state file 
+### to the remote. So how to do this import + repushing scenario.
+
 
