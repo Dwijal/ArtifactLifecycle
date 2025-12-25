@@ -35,11 +35,11 @@ stages:
             scriptType: 'bash'
             scriptLocation: 'inlineScript'
             inlineScript: |
-              az storage blob upload 
-              --account-name companyartifacts 
-              --container-name productionsartifacts 
-              --file target/*.war 
-              --name $(date +%F)/DevOps-CICD-war-0.1.war
+              az storage blob upload \
+              --account-name companyartifacts \
+              --container-name productionsartifacts \
+              --file target/*.war \
+              --name $(date +%F)/DevOps-CICD-war-0.1.war \
         - script: |
             echo  "Upload Done"
           condition: succeeded()
