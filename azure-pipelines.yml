@@ -44,7 +44,17 @@ stages:
             echo  "Upload Done"
           condition: succeeded()
           displayName: UploadStatus
-
+    - job: Deploy_to_remobe
+      dependsOn: Push_To_Blob
+      steps:
+        - task: DownloadSecureFile@1
+          name: sshkey
+          inputs:
+            secureFile: 'ado_privatekey'
+        - script: |
+            ssh -i $(sshkey.ado_privatekey)  azureuser@10.0.0.4
+            hostname
+            
 
 # Learnings :  If we have 10 Subnets and 10 VM , 1 VM in each subnet . So only 1 private endpoint is needed to access the 
 # storage account from 10 different subnets.
