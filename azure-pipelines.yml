@@ -76,11 +76,11 @@ stages:
                 "
                   pid=$(ps -ef| grep tomcat | awk ' NR==1 {print $2}')
                   kill -9 $pid
-      
-                  rm -rf /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/*.war
-                  cp /home/azureuser/tomcat/apache-tomcat-9.0.113/"$WAR_FILE" /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/
-                  cd /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/bin
-                  ./startup.sh
+                  echo $pid
+                  # rm -rf /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/*.war
+                  # cp /home/azureuser/tomcat/apache-tomcat-9.0.113/"$WAR_FILE" /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/
+                  # cd /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/bin
+                  # ./startup.sh
                 "
           displayName: Deploy WAR to remote Tomcat
             
