@@ -75,7 +75,7 @@ stages:
                 azureuser@52.172.153.119 \
                 "
                   pid=$(ps -ef| grep tomcat | awk ' NR==1 {print $2}')
-                  kill -9 $(pid)
+                  kill -9 $pid
       
                   rm -rf /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/*.war
                   cp /home/azureuser/tomcat/apache-tomcat-9.0.113/"$WAR_FILE" /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/
