@@ -55,8 +55,12 @@ stages:
           inputs:
             secureFile: 'ado_privatekey'
         - script: |
-            ssh -i $(sshkey.ado_privatekey)  azureuser@10.0.0.4
-            hostname
+            chmod 600 $(sshkey.secureFilePath)
+            ssh -o StrictHostKeyChecking=no \
+              -i $(sshkey.secureFilePath) \
+              azureuser@10.0.0.4 \
+              "hostname && whoami && uptime"
+     
             
 
 # Learnings :  If we have 10 Subnets and 10 VM , 1 VM in each subnet . So only 1 private endpoint is needed to access the 
