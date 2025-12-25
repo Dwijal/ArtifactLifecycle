@@ -35,10 +35,10 @@ stages:
             scriptType: 'bash'
             scriptLocation: 'inlineScript'
             inlineScript: |
-              az storage blob upload 
-              --account-name companyartifacts 
-              --container-name production-artifact 
-              --file target/*.war 
+              az storage blob upload \
+              --account-name companyartifacts \
+              --container-name production-artifact \
+              --file target/*.war \
               --name $(date +%F)/DevOps-CICD-war-0.1.war
 
 
