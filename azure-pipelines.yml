@@ -15,40 +15,39 @@ pool:
 stages:
   - stage: Build_Package
     jobs:
-    - job: Build
-      displayName: BuildJob
-      steps:
-        - script: |
-            mvn clean package
-          displayName: Build&PackageCode
-        - script: |
-            ls -lrt $(System.DefaultWorkingDirectory)/target
-          displayName: SeeTheWarFile
+    # - job: Build
+    #   displayName: BuildJob
+    #   steps:
+    #     - script: |
+    #         mvn clean package
+    #       displayName: Build&PackageCode
+    #     - script: |
+    #         ls -lrt $(System.DefaultWorkingDirectory)/target
+    #       displayName: SeeTheWarFile
           
-    - job: Push_To_Blob
-      dependsOn: Build
-      displayName: 'PUsh to Azure Blob Storage'
-      steps:
-        - task: AzureCLI@2
-          displayName: 'Pushing to Blob Storage '
-          inputs:
-            azureSubscription: 'blobupload'
-            scriptType: 'bash'
-            scriptLocation: 'inlineScript'
-            inlineScript: |
-              az storage blob upload \
-              --account-name companyartifacts \
-              --container-name productionsartifacts \
-              --file target/*.war \
-              --name $(date +%F)/DevOps-CICD-war-0.1.war \
-              --overwrite
-        - script: |
-            echo  "Upload Done"
-          condition: succeeded()
-          displayName: UploadStatus
+    # - job: Push_To_Blob
+    #   dependsOn: Build
+    #   displayName: 'PUsh to Azure Blob Storage'
+    #   steps:
+    #     - task: AzureCLI@2
+    #       displayName: 'Pushing to Blob Storage '
+    #       inputs:
+    #         azureSubscription: 'blobupload'
+    #         scriptType: 'bash'
+    #         scriptLocation: 'inlineScript'
+    #         inlineScript: |
+    #           az storage blob upload \
+    #           --account-name companyartifacts \
+    #           --container-name productionsartifacts \
+    #           --file target/*.war \
+    #           --name $(date +%F)/DevOps-CICD-war-0.1.war \
+    #           --overwrite
+    #     - script: |
+    #         echo  "Upload Done"
+    #       condition: succeeded()
+    #       displayName: UploadStatus
 
     - job: Deploy_to_remobe
-      dependsOn: Push_To_Blob
       steps:
         - task: DownloadSecureFile@1
           name: sshkey
@@ -62,7 +61,7 @@ stages:
             echo "Finding WAR file..."
             WAR_FILE=$(ls $(System.DefaultWorkingDirectory)/target/*.war | head -n 1)
             WAR_NAME=$(basename "$WAR_FILE")
-
+            echo $WAR_NAME
             echo "Copying WAR to remote server..."
             scp -o StrictHostKeyChecking=no \
                 -i $(sshkey.secureFilePath) \
@@ -74,10 +73,9 @@ stages:
                 -i $(sshkey.secureFilePath) \
                 azureuser@52.172.153.119 \
                 "
-                  pid=$(ps -ef| grep tomcat | awk ' NR==1 {print $2}')
-                  ls -lrt
-                  kill -9 $pid
-                  echo $pid
+                  cd /home/azureuser/tomcat/apache-tomcat-9.0.113/bin
+                  pwd
+                 
                   # rm -rf /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/*.war
                   # cp /home/azureuser/tomcat/apache-tomcat-9.0.113/"$WAR_FILE" /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/
                   # cd /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/bin
