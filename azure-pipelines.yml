@@ -75,6 +75,7 @@ stages:
                 azureuser@52.172.153.119 \
                 "
                   pid=$(ps -ef| grep tomcat | awk ' NR==1 {print $2}')
+                  ls -lrt
                   kill -9 $pid
                   echo $pid
                   # rm -rf /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/*.war
