@@ -55,11 +55,35 @@ stages:
           inputs:
             secureFile: 'ado_privatekey'
         - script: |
+            set -e
+
             chmod 600 $(sshkey.secureFilePath)
+
+            echo "Finding WAR file..."
+            WAR_FILE=$(ls $(System.DefaultWorkingDirectory)/target/*.war | head -n 1)
+            WAR_NAME=$(basename "$WAR_FILE")
+
+            echo "Copying WAR to remote server..."
+            scp -o StrictHostKeyChecking=no \
+                -i $(sshkey.secureFilePath) \
+                "$WAR_FILE" \
+                azureuser@98.70.101.98:/home/azureuser/tomcat/apache-tomcat-9.0.113/
+
+            echo "Deploying on remote server..."
             ssh -o StrictHostKeyChecking=no \
-              -i $(sshkey.secureFilePath) \
-              azureuser@10.0.0.4 
-            hostname
+                -i $(sshkey.secureFilePath) \
+                azureuser@98.70.101.98 \
+                "
+                  pid=$(ps -ef| grep tomcat | awk ' NR==1 {print $2}')
+                  kill -9 $(pid)
+      
+                  rm -rf /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/*.war
+                  cp /home/azureuser/tomcat/apache-tomcat-9.0.113/"$WAR_FILE" /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/
+                  cd /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/bin
+                  ./startup.sh
+                "
+          displayName: Deploy WAR to remote Tomcat
+            
             
 
 # Learnings :  If we have 10 Subnets and 10 VM , 1 VM in each subnet . So only 1 private endpoint is needed to access the 
