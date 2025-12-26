@@ -71,8 +71,8 @@ stages:
             echo "Deploying on remote server..."
             ssh -o StrictHostKeyChecking=no \
                 -i $(sshkey.secureFilePath) \
-                azureuser@52.172.153.119 \
-                "
+                azureuser@52.172.153.119 << 'EOF'
+                
                   cd /home/azureuser/tomcat/apache-tomcat-9.0.113/bin
                   pwd
                   
@@ -83,7 +83,7 @@ stages:
                   echo "$p_id"
                   #cd /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/bin
                   # ./startup.sh
-                "
+                EOF
           displayName: Deploy WAR to remote Tomcat
             
             
