@@ -25,71 +25,71 @@ stages:
             ls -lrt $(System.DefaultWorkingDirectory)/target
           displayName: SeeTheWarFile
           
-    - job: Push_To_Blob
-      dependsOn: Build
-      displayName: 'PUsh to Azure Blob Storage'
-      steps:
-        - task: AzureCLI@2
-          displayName: 'Pushing to Blob Storage '
-          inputs:
-            azureSubscription: 'blobupload'
-            scriptType: 'bash'
-            scriptLocation: 'inlineScript'
-            inlineScript: |
-              az storage blob upload \
-              --account-name companyartifacts \
-              --container-name productionsartifacts \
-              --file target/*.war \
-              --name $(date +%F)/DevOps-CICD-war-0.1.war \
-              --overwrite
-        - script: |
-            echo  "Upload Done"
-          condition: succeeded()
-          displayName: UploadStatus
+    # - job: Push_To_Blob
+    #   dependsOn: Build
+    #   displayName: 'PUsh to Azure Blob Storage'
+    #   steps:
+    #     - task: AzureCLI@2
+    #       displayName: 'Pushing to Blob Storage '
+    #       inputs:
+    #         azureSubscription: 'blobupload'
+    #         scriptType: 'bash'
+    #         scriptLocation: 'inlineScript'
+    #         inlineScript: |
+    #           az storage blob upload \
+    #           --account-name companyartifacts \
+    #           --container-name productionsartifacts \
+    #           --file target/*.war \
+    #           --name $(date +%F)/DevOps-CICD-war-0.1.war \
+    #           --overwrite
+    #     - script: |
+    #         echo  "Upload Done"
+    #       condition: succeeded()
+    #       displayName: UploadStatus
 
-    - job: Deploy_to_remobe
-      steps:
-        - task: DownloadSecureFile@1
-          name: sshkey
-          inputs:
-            secureFile: 'ado_privatekey'
-        - script: |
-            set -e
+    # - job: Deploy_to_remobe
+    #   steps:
+    #     - task: DownloadSecureFile@1
+    #       name: sshkey
+    #       inputs:
+    #         secureFile: 'ado_privatekey'
+    #     - script: |
+    #         set -e
 
-            chmod 400 $(sshkey.secureFilePath)
+    #         chmod 400 $(sshkey.secureFilePath)
 
-            echo "Finding WAR file..."
-            WAR_FILE=$(ls $(System.DefaultWorkingDirectory)/target/*.war | head -n 1)
-            WAR_NAME=$(basename "$WAR_FILE")
-            echo $WAR_NAME
-            echo "Copying WAR to remote server..."
-            scp -o StrictHostKeyChecking=no \
-                -i $(sshkey.secureFilePath) \
-                "$WAR_FILE" \
-                azureuser@52.172.153.119:/home/azureuser/tomcat/apache-tomcat-9.0.113/
+    #         echo "Finding WAR file..."
+    #         WAR_FILE=$(ls $(System.DefaultWorkingDirectory)/target/*.war | head -n 1)
+    #         WAR_NAME=$(basename "$WAR_FILE")
+    #         echo $WAR_NAME
+    #         echo "Copying WAR to remote server..."
+    #         scp -o StrictHostKeyChecking=no \
+    #             -i $(sshkey.secureFilePath) \
+    #             "$WAR_FILE" \
+    #             azureuser@52.172.153.119:/home/azureuser/tomcat/apache-tomcat-9.0.113/
 
-            echo "Deploying on remote server..."
-            ssh -o StrictHostKeyChecking=no \
-                -i $(sshkey.secureFilePath) \
-                azureuser@52.172.153.119 << 'EOF'
+    #         echo "Deploying on remote server..."
+    #         ssh -o StrictHostKeyChecking=no \
+    #             -i $(sshkey.secureFilePath) \
+    #             azureuser@52.172.153.119 << 'EOF'
                 
-                  cd /home/azureuser/tomcat/apache-tomcat-9.0.113/bin
-                  pwd
+    #               cd /home/azureuser/tomcat/apache-tomcat-9.0.113/bin
+    #               pwd
                   
-                  rm -rf /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/*.war
-                  warfile=/home/azureuser/tomcat/apache-tomcat-9.0.113/*.war
-                  warname=$(basename $warfile)
-                  echo "$warname"
-                  cp -r /home/azureuser/tomcat/apache-tomcat-9.0.113/$warname /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/
-                  p_id=$(ps -ef| grep -i tomcat | grep -v grep | awk '{print $2}' )
-                  echo "$p_id"
-                  kill -9 $p_id
-                  cd /home/azureuser/tomcat/apache-tomcat-9.0.113/bin
-                  ./startup.sh
-                  p_id=$(ps -ef| grep -i tomcat | grep -v grep | awk '{print $2}' )
-                  echo "$p_id"
-            EOF
-          displayName: Deploy WAR to remote Tomcat
+    #               rm -rf /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/*.war
+    #               warfile=/home/azureuser/tomcat/apache-tomcat-9.0.113/*.war
+    #               warname=$(basename $warfile)
+    #               echo "$warname"
+    #               cp -r /home/azureuser/tomcat/apache-tomcat-9.0.113/$warname /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/
+    #               p_id=$(ps -ef| grep -i tomcat | grep -v grep | awk '{print $2}' )
+    #               echo "$p_id"
+    #               kill -9 $p_id
+    #               cd /home/azureuser/tomcat/apache-tomcat-9.0.113/bin
+    #               ./startup.sh
+    #               p_id=$(ps -ef| grep -i tomcat | grep -v grep | awk '{print $2}' )
+    #               echo "$p_id"
+    #         EOF
+    #       displayName: Deploy WAR to remote Tomcat
             
             
 
