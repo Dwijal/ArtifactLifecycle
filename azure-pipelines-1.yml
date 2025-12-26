@@ -30,7 +30,7 @@ stages:
             scriptLocation: inlineScript
             inlineScript: |
               DATE_FOLDER="2025-12-26"
-              ARTIFACT_NAME= ${{ parameters.artifactVersion }}
+              ARTIFACT_NAME=${{ parameters.artifactVersion }}
 
               az storage blob download \
                 --account-name companyartifacts \
