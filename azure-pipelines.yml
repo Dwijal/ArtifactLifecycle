@@ -84,7 +84,7 @@ stages:
                   p_id=$(ps -ef| grep -i tomcat | grep -v grep | awk '{print $2}' )
                   echo "$p_id"
                   kill -9 $p_id
-                  cd /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/bin
+                  cd /home/azureuser/tomcat/apache-tomcat-9.0.113/bin
                   ./startup.sh
                   p_id=$(ps -ef| grep -i tomcat | grep -v grep | awk '{print $2}' )
                   echo "$p_id"
