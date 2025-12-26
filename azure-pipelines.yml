@@ -83,7 +83,7 @@ stages:
                   echo "$p_id"
                   #cd /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/bin
                   # ./startup.sh
-              EOF
+            EOF
           displayName: Deploy WAR to remote Tomcat
             
             
