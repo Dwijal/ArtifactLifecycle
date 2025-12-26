@@ -37,5 +37,6 @@ stages:
                 --container-name productionsartifacts \
                 --name "$DATE_FOLDER/$ARTIFACT_NAME" \
                 --file $(Pipeline.Workspace)/$ARTIFACT_NAME
-
+        - script: |
+            ls -lrt $(Pipeline.Workspace)
 
