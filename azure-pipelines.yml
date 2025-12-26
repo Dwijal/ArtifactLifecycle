@@ -79,12 +79,15 @@ stages:
                   rm -rf /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/*.war
                   warfile=/home/azureuser/tomcat/apache-tomcat-9.0.113/*.war
                   warname=$(basename $warfile)
-                  echo "$WAR_NAME"
+                  echo "$warname"
                   cp -r /home/azureuser/tomcat/apache-tomcat-9.0.113/$warname /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/
                   p_id=$(ps -ef| grep -i tomcat | grep -v grep | awk '{print $2}' )
                   echo "$p_id"
-                  #cd /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/bin
-                  # ./startup.sh
+                  kill -9 $p_id
+                  cd /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/bin
+                  ./startup.sh
+                  p_id=$(ps -ef| grep -i tomcat | grep -v grep | awk '{print $2}' )
+                  echo "$p_id"
             EOF
           displayName: Deploy WAR to remote Tomcat
             
