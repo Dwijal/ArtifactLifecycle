@@ -25,27 +25,27 @@ stages:
             ls -lrt $(System.DefaultWorkingDirectory)/target
           displayName: SeeTheWarFile
           
-    # - job: Push_To_Blob
-    #   dependsOn: Build
-    #   displayName: 'PUsh to Azure Blob Storage'
-    #   steps:
-    #     - task: AzureCLI@2
-    #       displayName: 'Pushing to Blob Storage '
-    #       inputs:
-    #         azureSubscription: 'blobupload'
-    #         scriptType: 'bash'
-    #         scriptLocation: 'inlineScript'
-    #         inlineScript: |
-    #           az storage blob upload \
-    #           --account-name companyartifacts \
-    #           --container-name productionsartifacts \
-    #           --file target/*.war \
-    #           --name $(date +%F)/DevOps-CICD-war-0.1.war \
-    #           --overwrite
-    #     - script: |
-    #         echo  "Upload Done"
-    #       condition: succeeded()
-    #       displayName: UploadStatus
+    - job: Push_To_Blob
+      dependsOn: Build
+      displayName: 'PUsh to Azure Blob Storage'
+      steps:
+        - task: AzureCLI@2
+          displayName: 'Pushing to Blob Storage '
+          inputs:
+            azureSubscription: 'blobupload'
+            scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              az storage blob upload \
+              --account-name companyartifacts \
+              --container-name productionsartifacts \
+              --file target/*.war \
+              --name $(date +%F)/DevOps-CICD-0.2.war \
+              --overwrite
+        - script: |
+            echo  "Upload Done"
+          condition: succeeded()
+          displayName: UploadStatus
 
     # - job: Deploy_to_remobe
     #   steps:
