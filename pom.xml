@@ -8,7 +8,7 @@
 
     <groupId>com.devopscicd</groupId>
     <artifactId>DevOps-CICD-war</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
     <packaging>war</packaging>
 
     <name>DevOps CICD Flow WAR File</name>
