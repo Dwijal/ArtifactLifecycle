@@ -107,4 +107,6 @@ stages:
 ### So now either we have to remove the changes fro the cloud or add the entires into the state file and repush the state file 
 ### to the remote. So how to do this import + repushing scenario.
 
+### ADO jobs are isolated from each other .Jobs do not automatically share files with each other; 
+#### if one job needs files from another job, you must explicitly pass them as artifacts.
 
