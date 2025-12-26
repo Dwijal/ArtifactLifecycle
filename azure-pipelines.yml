@@ -77,8 +77,10 @@ stages:
                   pwd
                   
                   rm -rf /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/*.war
+                  warfile=/home/azureuser/tomcat/apache-tomcat-9.0.113/*.war
+                  warname=$(basename $warfile)
                   echo "$WAR_NAME"
-                  cp /home/azureuser/tomcat/apache-tomcat-9.0.113/"$WAR_NAME" /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/
+                  cp -r /home/azureuser/tomcat/apache-tomcat-9.0.113/$warname /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/
                   p_id=$(ps -ef| grep -i tomcat | grep -v grep | awk '{print $2}' )
                   echo "$p_id"
                   #cd /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/bin
