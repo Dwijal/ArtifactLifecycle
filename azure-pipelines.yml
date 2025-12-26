@@ -80,7 +80,7 @@ stages:
                   echo "$WAR_NAME"
                   cp /home/azureuser/tomcat/apache-tomcat-9.0.113/"$WAR_NAME" /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/
                   p_id=$(ps -ef| grep -i tomcat | grep -v grep | awk '{print $2}' )
-                  echo "p_id"
+                  echo p_id
                   #cd /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/bin
                   # ./startup.sh
                 "
