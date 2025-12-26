@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.devopscicd</groupId>
-    <artifactId>DevOps-CICD-war</artifactId>
+    <artifactId>DevOps-CICD</artifactId>
     <version>0.2</version>
     <packaging>war</packaging>
 
