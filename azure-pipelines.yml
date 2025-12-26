@@ -75,8 +75,9 @@ stages:
                 "
                   cd /home/azureuser/tomcat/apache-tomcat-9.0.113/bin
                   pwd
-                 
-                  # rm -rf /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/*.war
+                  
+                  rm -rf /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/*.war
+                  echo "$WAR_FILE"
                   # cp /home/azureuser/tomcat/apache-tomcat-9.0.113/"$WAR_FILE" /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/
                   # cd /home/azureuser/tomcat/apache-tomcat-9.0.113/webapps/bin
                   # ./startup.sh
