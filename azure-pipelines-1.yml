@@ -1,0 +1,41 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger: none
+
+pool:
+  name: 'dwipool'
+  demands:
+    - agent.name -equals dwiagent
+
+
+parameters:
+  - name: artifactVersion
+    type: string
+    displayName: Select the artifact version or name to rollback
+
+
+stages:
+  - stage: DownloadArtifact
+    jobs:
+    - job: DownloadArtifacts
+      steps:
+        - task: AzureCLI@2
+          displayName: Download artifact from date folder
+          inputs:
+            azureSubscription: 'blobupload'
+            scriptType: bash
+            scriptLocation: inlineScript
+            inlineScript: |
+              DATE_FOLDER="2025-12-26"
+              ARTIFACT_NAME= ${{ parameters.artifactVersion }}
+
+              az storage blob download \
+                --account-name companyartifacts \
+                --container-name productionsartifacts \
+                --name "$DATE_FOLDER/$ARTIFACT_NAME" \
+                --file $(Pipeline.Workspace)/$ARTIFACT_NAME
+
+
