@@ -23,6 +23,9 @@ stages:
           displayName: Build&PackageCode
         - script: |
             ls -lrt $(System.DefaultWorkingDirectory)/target
+            WAR_FILE=$(ls $(System.DefaultWorkingDirectory)/target/*.war | head -n 1)
+            WAR_NAME=$(basename "$WAR_FILE")
+            cp $WAR_FILE $(Pipeline.Workspace)/artifacts
           displayName: SeeTheWarFile
           
     - job: Push_To_Blob
@@ -39,7 +42,7 @@ stages:
               az storage blob upload \
               --account-name companyartifacts \
               --container-name productionsartifacts \
-              --file target/*.war \
+              --file $(Pipeline.Workspace)/artifacts/*.war \
               --name $(date +%F)/DevOps-CICD-0.2.war \
               --overwrite
         - script: |
@@ -60,13 +63,14 @@ stages:
             chmod 400 $(sshkey.secureFilePath)
 
             echo "Finding WAR file..."
-            WAR_FILE=$(ls $(System.DefaultWorkingDirectory)/target/*.war | head -n 1)
+            WAR_FILE=$(ls $(Pipeline.Workspace)/artifacts/*.war | head -n 1)
             WAR_NAME=$(basename "$WAR_FILE")
+            echo "Below is the updated War File name"
             echo $WAR_NAME
             echo "Copying WAR to remote server..."
             scp -o StrictHostKeyChecking=no \
                 -i $(sshkey.secureFilePath) \
-                "$WAR_NAME" \
+                "$WAR_FILE" \
                 azureuser@52.172.153.119:/home/azureuser/tomcat/apache-tomcat-9.0.113/
 
             echo "Deploying on remote server..."
